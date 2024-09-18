@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+
 struct Pipe
 {
     std::string name;
@@ -22,17 +23,22 @@ struct KS {
 };
 
 Pipe PipeGen();
-void Pipeprint(Pipe p);
+void PipePrint(Pipe p);
 KS KSCreate();
 void KSPrint(KS g);
+void PipeСhange(Pipe p);
+void KSChange(KS g);
+void PrintMainMenu();
+void MainMenu(Pipe& p, KS& g);
+
 
 int main()
 {
     setlocale(LC_ALL, "RU");
-    Pipe p = PipeGen();
-    Pipeprint(p);
-    KS g = KSCreate();
-    KSPrint(g);
+    PrintMainMenu();
+    Pipe p;
+    KS g;
+    MainMenu(p,g);
 
 }
 
@@ -62,12 +68,12 @@ Pipe PipeGen() {
     return p;
 }
 
-void Pipeprint(Pipe p) {
+void PipePrint(Pipe p) {
     std::cout << "\n";
     std::cout << "Название: " << p.name << std::endl;
     std::cout << "Длина: " << p.length << std::endl;
     std::cout << "Диаметр: " << p.diameter << std::endl;
-    std::cout << "Состояние: " << (p.state ? "Исправна" : "В работе") << std::endl;
+    std::cout << "Состояние: " << (p.state ? "Исправна" : "В ремонте") << std::endl;
 
 }
 
@@ -106,7 +112,88 @@ void KSPrint(KS g) {
     std::cout << "Эффективность: " << g.efficiency << std::endl;
 }
 
+void PipeСhange(Pipe p) {
+    std::cout << "\n";
+    std::cout << "Отредактируйте состояние ";
+    while (!(std::cin >> p.state)) {
+        std::cout << "Ошибка ввода. Введите 1 для исправно или 0 для в работе ";
+        std::cin.clear(); // Сброс состояния потока
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    PipePrint(p);
+}
 
+void KSChange(KS g) {
+    std::cout << "\n";
+    std::cout << "Отредактируйте состояние ";
+    while (!(std::cin >> g.workshops_work)) {
+        std::cout << "Ошибка ввода. Введите корректное значение  ";
+        std::cin.clear(); // Сброс состояния потока
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+    KSPrint(g);
+}
+
+void PrintMainMenu() {
+    std::cout << 
+        "1. Добавить трубу" << "\n"
+        "2. Добавить КС" << "\n"
+        "3. Просмотр всех объектов" << "\n"
+        "4. Редактировать трубу" << "\n"
+        "5. Редактировать КС" << "\n"
+        "6. Сохранить" << "\n"
+        "7. Загрузить" << "\n"
+        "0. Выход" << "\n" << "\n";
+}
+
+void MainMenu(Pipe& p, KS& g) {
+    int usernumber;
+    while (1) {
+        std::cin >> usernumber;
+        switch (usernumber) {
+        case 1:
+            p = PipeGen();
+            PipePrint(p);
+            break;
+        case 2:
+            g = KSCreate();
+            KSPrint(g);
+            break;
+        case 3:
+            if (p.name == "" && g.name == "") {
+                std::cout << "Нет данных для вывода" << "\n";
+            }
+            else {
+                if (p.name != "") {
+                    PipePrint(p);  // Выводим данные о трубе, если она существует
+                }
+
+                if (g.name != "") {
+                    KSPrint(g);  // Выводим данные о KS, если он существует
+                }
+            }
+            break;
+        case 4:
+            if (p.name == "") {
+                std::cout << "Для редактирования нажмите 1 и создайте трубу" << "\n";
+            }
+            else {
+                PipeСhange(p);
+            }
+            break;
+        case 5:
+            if (g.name == "") {
+                std::cout << "Для редактирования нажмите 2 и создайте КС" << "\n";
+            }
+            else {
+                KSChange(g);
+            }
+            break;
+        }
+        
+
+    }
+}
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
 // Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 
