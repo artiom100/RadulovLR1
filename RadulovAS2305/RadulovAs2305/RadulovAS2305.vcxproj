@@ -129,7 +129,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InOut.cpp" />
+    <ClCompile Include="KS.cpp" />
+    <ClCompile Include="KSCreate.cpp" />
+    <ClCompile Include="Pipe.cpp" />
+    <ClCompile Include="PipeCreate.cpp" />
     <ClCompile Include="Radulov.cpp" />
+    <ClCompile Include="Tools.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KS.h" />
+    <ClInclude Include="Pipe.h" />
+    <ClInclude Include="Tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

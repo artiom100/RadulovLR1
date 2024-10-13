@@ -4,24 +4,13 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include "Pipe.h"
+#include "KS.h"
 
 
-struct Pipe
-{
-    std::string name;
-    int length;
-    int diameter;
-    bool state;
 
-};
 
-struct KS {
-    std::string name;
-    int workshops;
-    int workshops_work;
-    int efficiency;
 
-};
 
 Pipe PipeGen();
 void PipePrint(const Pipe& p);
@@ -41,80 +30,18 @@ int main()
 {
     setlocale(LC_ALL, ".1251");
     //SetConsoleCP(1251);
-    PrintMainMenu();
     MainMenu();
 
 }
 
-Pipe PipeGen() {
 
-    Pipe p;
-    std::cout << "Введите название для трубы: ";
-    std::cin >> std::ws;
-    getline(std::cin, p.name);
-    std::cout << "Введите длину: ";
-    while (!(std::cin >> p.length) || p.length <= 0) {
-        std::cout << "Ошибка ввода. Введите целое число для длины отличное от нуля: ";
-        fix();
-    }
-    std::cout << "Введите диаметр: ";
-    while (!(std::cin >> p.diameter) || p.diameter <= 0) {
-        std::cout << "Ошибка ввода. Введите целое число для диаметра: ";
-        fix();
-    }
-    std::cout << "Введите состояние: ";
-    while (!(std::cin >> p.state)) {
-        std::cout << "Ошибка ввода. Введите 1 для исправно или 0 для в работе ";
-        fix();
-    }
-    return p;
-}
 
-void PipePrint(const Pipe& p) {
-    std::cout << "\n";
-    std::cout << "Название: " << p.name << std::endl;
-    std::cout << "Длина: " << p.length << std::endl;
-    std::cout << "Диаметр: " << p.diameter << std::endl;
-    std::cout << "Состояние: " << (p.state ? "Исправна" : "В ремонте") << std::endl;
 
-}
-
-KS KSCreate() {
-
-    KS g;
-    std::cout << "\n";
-    std::cout << "Введите название для КС: ";
-    std::cin >> std::ws;
-    getline(std::cin, g.name);
-    std::cout << "Введите количество цехов: ";
-    while (!(std::cin >> g.workshops) || g.workshops <= 0) {
-        std::cout << "Ошибка ввода. Введите целое число цехов отличное от нуля: ";
-        fix();
-    }
-    std::cout << "Введите количество цехов в работе: ";
-    while (!(std::cin >> g.workshops_work) || (g.workshops < g.workshops_work) || g.workshops_work < 0) {
-        std::cout << "Ошибка ввода. Введите корректное число цехов в работе (количество цехов в работе должно быть меньше количества цехов): ";
-        fix();
-    }
-    std::cout << "Введите Эффективность: ";
-    while (!(std::cin >> g.efficiency) || g.efficiency <= 0 || g.efficiency > 100) {
-        std::cout << "Ошибка ввода. Введите целое число эффективности в диапозоне от 1 до 100: ";
-        fix();
-    }
-    return g;
-}
-
-void KSPrint(const KS& g) {
-    std::cout << "\n";
-    std::cout << "Название: " << g.name << std::endl;
-    std::cout << "Количество цехов: " << g.workshops << std::endl;
-    std::cout << "Количество цехов в работе: " << g.workshops_work << std::endl;
-    std::cout << "Эффективность: " << g.efficiency << std::endl;
-}
 
 void PipeСhange(Pipe& p) {
     std::cout << "\n";
     std::cout << "Отредактируйте состояние ";
+    std::cout << "\n";
     while (!(std::cin >> p.state)) {
         std::cout << "Ошибка ввода. Введите 1 для исправно или 0 для в работе ";
         fix();
@@ -158,6 +85,7 @@ void MainMenu() {
     KS g;
     int usernumber;
     while (1) {
+        PrintMainMenu();
         while (!(std::cin >> usernumber)) {
             std::cout << "Ошибка ввода. Введите корректное значение  ";
             fix();
@@ -255,43 +183,8 @@ void MainMenu() {
     }
 }
 
-void fix() {
-    std::cin.clear(); // Сброс состояния потока
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
 
-void SavePipe(std::ofstream& fout, const Pipe& p)
-{
-    fout << p.name << std::endl << p.length << std::endl << p.diameter << std::endl << p.state << std::endl;
-}
 
-void SaveKS(std::ofstream& fout, const KS& g)
-{
-    fout << g.name << std::endl << g.workshops << std::endl << g.workshops_work << std::endl << g.efficiency << std::endl;
-}
-
-Pipe LoadPipe(std::ifstream& fin)
-{
-    Pipe p;
-    fin >> std::ws;
-    getline(fin, p.name);
-    fin >> p.length;
-    fin >> p.diameter;
-    fin >> p.state;
-
-    return p;
-}
-
-KS LoadKS(std::ifstream& fin) {
-    KS g;
-    fin >> std::ws;
-    getline(fin, g.name);
-    fin >> g.workshops;
-    fin >> g.workshops_work;
-    fin >> g.efficiency;
-
-    return g;
-}
 
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
