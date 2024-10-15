@@ -1,53 +1,42 @@
 #include <iostream>
-#include "Pipe.h"
-#include "KS.h"
+#include "InOut.h"
 #include <string>
 #include <fstream>
+#include "Tools.h"
+#include <unordered_map>
 
-void PipePrint(const Pipe& p) {
-    std::cout << "\n";
-    std::cout << "Название: " << p.name << std::endl;
-    std::cout << "Длина: " << p.length << std::endl;
-    std::cout << "Диаметр: " << p.diameter << std::endl;
-    std::cout << "Состояние: " << (p.state ? "Исправна" : "В ремонте") << std::endl << std::endl;
-}
-void KSPrint(const KS& g) {
-    std::cout << "\n";
-    std::cout << "Название: " << g.name << std::endl;
-    std::cout << "Количество цехов: " << g.workshops << std::endl;
-    std::cout << "Количество цехов в работе: " << g.workshops_work << std::endl;
-    std::cout << "Эффективность: " << g.efficiency << std::endl;
+std::unordered_map<int, Pipe> Pipemap;
+std::unordered_map<int, KS> KSmap;
+
+std::unordered_map<int, Pipe> PipesCreate(Pipe & p, std::unordered_map<int, Pipe> &m) {
+    m.emplace(p.GetId(), p);
+    return m;
 }
 
-void SavePipe(std::ofstream& fout, const Pipe& p)
-{
-    fout << p.name << std::endl << p.length << std::endl << p.diameter << std::endl << p.state << std::endl;
+std::unordered_map<int, KS> KSCreate(KS &g, std::unordered_map<int, KS>& m) {
+    m.emplace(g.GetId(), g);
+    return m;
 }
 
-void SaveKS(std::ofstream& fout, const KS& g)
-{
-    fout << g.name << std::endl << g.workshops << std::endl << g.workshops_work << std::endl << g.efficiency << std::endl;
+
+void PipesPrint(std::unordered_map<int, Pipe> &m) {
+    if (m.empty()) {
+        std::cout << '\n';
+        std::cout << "Труб нет." << std::endl;
+        return;
+    }
+    for (const auto& Pipe : m) {
+        std::cout << Pipe.second;
+    }
 }
 
-Pipe LoadPipe(std::ifstream& fin)
-{
-    Pipe p;
-    fin >> std::ws;
-    getline(fin, p.name);
-    fin >> p.length;
-    fin >> p.diameter;
-    fin >> p.state;
-
-    return p;
-}
-
-KS LoadKS(std::ifstream& fin) {
-    KS g;
-    fin >> std::ws;
-    getline(fin, g.name);
-    fin >> g.workshops;
-    fin >> g.workshops_work;
-    fin >> g.efficiency;
-
-    return g;
+void KSPrint(std::unordered_map<int, KS>& m) {
+    if (m.empty()) { 
+        std::cout << "КС нет." << std::endl;
+        std::cout << '\n';
+        return;
+    }
+    for (const auto& KS : m) {
+        std::cout << KS.second;
+    }
 }

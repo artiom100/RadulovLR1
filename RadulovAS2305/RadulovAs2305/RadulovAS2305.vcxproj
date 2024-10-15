@@ -138,6 +138,7 @@
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InOut.h" />
     <ClInclude Include="KS.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Tools.h" />
