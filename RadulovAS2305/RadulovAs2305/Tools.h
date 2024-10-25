@@ -1,7 +1,62 @@
 #pragma once
-#include "Tools.h"
 #include <iostream>
-#include "InOut.h"
+#include "Pipe.h"
+#include "KS.h"
+#include <unordered_map>
+#include <unordered_set>
 void fix();
-void search(Pipe& p, std::unordered_map<int, Pipe>& m, std::unordered_map<int, Pipe>& t);
-void searchKS(KS& g, std::unordered_map<int, KS>& m, std::unordered_map<int, KS>& filterKS);
+
+
+bool checknamepipe(const Pipe& p, std::string param);
+bool checkstate(const Pipe& p, bool param);
+
+bool checknameks(const KS& g, std::string param);
+bool workshops(const KS& g, int param);
+
+
+
+template<typename T>
+using filterpipe = bool(*)(const Pipe& p, T param);
+
+template<typename T>
+std::unordered_set<int> FindPipeFilter(const std::unordered_map<int, Pipe>& Pipemap, filterpipe<T> f, T param)
+{
+	std::unordered_set <int> res;
+	int i = 0;
+	for (auto& p : Pipemap)
+	{
+		if (f(p.second, param))
+			res.emplace(p.first);
+		i++;
+	}
+
+	return res;
+}
+
+
+
+template<typename T>
+using filterks = bool(*)(const KS& g, T param);
+
+template<typename T>
+std::unordered_set<int> FindKSFilter(const std::unordered_map<int, KS>& KSmap, filterks<T> f, T param)
+{
+	std::unordered_set <int> res;
+	int i = 0;
+	for (auto& g : KSmap)
+	{
+		if (f(g.second, param))
+			res.emplace(g.first);
+		i++;
+	}
+
+	return res;
+}
+
+
+
+
+
+
+
+

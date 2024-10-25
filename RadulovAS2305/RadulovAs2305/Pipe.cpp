@@ -15,7 +15,7 @@ Pipe::Pipe()
 	state = 0;
 }
 
-bool Pipe::Getstate()
+bool Pipe::Getstate() const
 {
     return state;
 }
@@ -80,8 +80,10 @@ int Pipe::GetId()
     return id;
 }
 
-std::string Pipe::Getname()
+std::string Pipe::Getname() const
 {
     return name;
 }
+
+
 

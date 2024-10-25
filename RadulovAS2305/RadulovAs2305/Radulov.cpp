@@ -9,16 +9,20 @@
 #include "InOut.h"
 #include "Tools.h"
 #include <unordered_map>
-
+#include <unordered_set>
 
 
 
 
 void PrintMainMenu();
+void Printaddmenu();
 void MainMenu();
 void fix();
-void SavePipe(std::ofstream& fout, const Pipe& p);
-void SaveKS(std::ofstream& fout, const KS& g);
+std::unordered_map<int, Pipe> Pipemap;
+std::unordered_map<int, KS> KSmap;
+
+//void SavePipe(std::ofstream& fout, const Pipe& p);
+//void SaveKS(std::ofstream& fout, const KS& g);
 //Pipe LoadPipe(std::ifstream& fin);
 //KS LoadKS(std::ifstream& fin);
 
@@ -62,6 +66,62 @@ int main()
 //    }
 //}
 
+std::string name;
+void FindPipename() {
+    if (Pipemap.empty()) {
+        std::cout << "Труб нет" << std::endl << std::endl;
+    }
+    else {
+        std::cout << "Для поиска введите имя: ";
+        std::cin >> name;
+        for (int i : FindPipeFilter(Pipemap, checknamepipe, name))
+            std::cout << Pipemap[i];
+    }
+   
+}
+bool checkst;
+void FindPipestate() {
+   
+    if (Pipemap.empty()) {
+        std::cout << "Труб нет" << std::endl << std::endl;
+    }
+    else {
+        std::cout << "Для поиска введите состояние (0 или 1): ";
+        while (!(std::cin >> checkst)) {
+            std::cout << "Ошибка ввода. Введите корректное значение  ";
+            fix();
+        }
+        for (int i : FindPipeFilter(Pipemap, checkstate, checkst))
+            std::cout << Pipemap[i];
+    }
+}
+void FindKSname() {
+    if (KSmap.empty()) {
+        std::cout << "";
+    }
+    else {
+        std::cout << "Для поиска введите имя: ";
+        std::cin >> name;
+        for (int i : FindKSFilter(KSmap, checknameks, name))
+            std::cout << KSmap[i];
+    }
+}
+int work;
+void FindKSwork() {
+    if (KSmap.empty()) {
+        std::cout << "КС нет" << std::endl << std::endl;
+    }
+    else {
+        std::cout << "Для поиска введите количество цехов: ";
+        while (!(std::cin >> work)) {
+            std::cout << "Ошибка ввода. Введите корректное значение  ";
+            fix();
+        }
+        for (int i : FindKSFilter(KSmap, workshops, work))
+            std::cout << KSmap[i];
+    }
+}
+
 void PrintMainMenu() {
     std::cout << 
         "1. Добавить трубу" << "\n"
@@ -71,23 +131,30 @@ void PrintMainMenu() {
         "5. Редактировать КС" << "\n"
         "6. Сохранить" << "\n"
         "7. Загрузить" << "\n"
+        "8. Поиск" << "\n"
         "0. Выход" << "\n" << "\n";
 }
+void Printaddmenu() {
+    std::cout << "1.Посик трубы по имени" << std::endl;
+    std::cout << "2.Посик трубы по состоянию" << std::endl;
+    std::cout << "3.Посик КС по имени" << std::endl;
+    std::cout << "4.Посик КС по цехам" << std::endl << std::endl;
+}
+
 
 void MainMenu() {
     Pipe p;
     KS g;
     int usernumber;
-    std::unordered_map<int, Pipe> Pipemap;
-    std::unordered_map<int, KS> KSmap;
-    std::unordered_map<int, Pipe> t;
-    std::unordered_map<int, KS> filterKS;
+    
+
     while (1) {
         PrintMainMenu();
         while (!(std::cin >> usernumber)) {
             std::cout << "Ошибка ввода. Введите корректное значение  ";
             fix();
         }
+
         switch (usernumber) {
         case 1:
             std::cin >> p;
@@ -101,76 +168,43 @@ void MainMenu() {
             PipesPrint(Pipemap);
             KSPrint(KSmap);
             break;
-        /*case 4:
-            if (p.name == "") {
-                std::cout << "Для редактирования нажмите 1 и создайте трубу" << "\n";
-            }
-            else {
-                PipeСhange(p);
-            }
-            break;*/
-        /*case 5:
-            if (g.name == "") {
-                std::cout << "Для редактирования нажмите 2 и создайте КС" << "\n";
-            }
-            else {
-                KSChange(g);
-            }
-            break;*/
-        //case 6:{
-        //    std::ofstream fout("result.txt", std::ios::out);
-        //    if (fout.is_open()) {
-        //        if (p.name == "" && g.name == "") {
-        //            std::cout << "Нет данных для записи" << "\n";
-        //        }
-        //        else {
-        //            if (p.name != "") {
-        //                fout << "pipe" << std::endl;  // Маркер начала данных трубы
-        //                SavePipe(fout, p);
-        //                std::cout << "Сохранение трубы прошло успешно!\n";
-        //            }
-        //            if (g.name != "") {
-        //                fout << "ks" << std::endl;  // Маркер начала данных КС
-        //                SaveKS(fout, g);
-        //                std::cout << "Сохранение КС прошло успешно!\n";
-        //            }
-        //        }
-        //        fout.close();  // Закрываем файл
-        //    }
-        //    else {
-        //        std::cout << "Ошибка открытия файла!" << "\n";
-        //    }
-        //    break;
-        //}
         case 7: {
-            std::ifstream fin("result.txt", std::ios::in);
-            if (fin.is_open()) {
-                p = {};
-                g = {};
-                std::string marker;
-                while (fin >> marker) {  // Считываем маркер
-                    if (marker == "pipe") {
-                        /*p = LoadPipe(fin);*/  // Загружаем данные трубы
-                        std::cout << "Труба загружена!\n";
-                    }
-                    else if (marker == "ks") {
-                       /*g =  LoadKS(fin);*/  // Загружаем данные КС
-                       std::cout << "КС загружена!\n";
-                    }
+            break;
+        }
+        case 8: {
+            // Подменю для поиска
+            bool exitSubMenu = false;
+            while (!exitSubMenu) {
+                Printaddmenu(); // Печать подменю
+                std::cin >> usernumber;
+                switch (usernumber) {
+                case 1:
+                    FindPipename();
+                    break;
+                case 2:
+                    FindPipestate();
+                    break;
+                case 3:
+                    FindKSname();
+                    break;
+                case 4:
+                    FindKSwork();
+                    break;
+                case 0:
+                    exitSubMenu = true;
+                    break;
+                default:
+                    std::cout << "Некорректный ввод. Повторите попытку.\n";
+                    break;
                 }
-                fin.close();  // Закрываем файл
-            }
-            else {
-                std::cout << "Ошибка открытия файла!" << "\n";
             }
             break;
         }
-        case 8:
-            search(p, Pipemap, t);
-            searchKS(g, KSmap, filterKS);
-            break;
         case 0:
-            return;
+            return; // Завершение программы
+        default:
+            std::cout << "Некорректный ввод. Попробуйте снова.\n";
+            break;
         }
     }
 }

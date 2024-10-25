@@ -16,8 +16,8 @@ private:
 public:
     Pipe();
     int GetId();
-    std::string Getname();
-    bool Getstate();
+    std::string Getname() const;
+    bool Getstate() const;
 
     friend std::ifstream& operator >> (std::ifstream& fin, Pipe& p);
     friend std::ofstream& operator << (std::ofstream& fout, const Pipe& p);

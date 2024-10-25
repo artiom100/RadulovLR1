@@ -14,9 +14,9 @@ private:
     static int maxid;
 public:
     KS();
-    std::string Getname();
+    std::string Getname() const;
     int GetId();
-
+    int Getworkshops() const;
     friend std::ifstream& operator >> (std::ifstream& fin, KS& g);
     friend std::ofstream& operator << (std::ofstream& fout, const KS& g);
 

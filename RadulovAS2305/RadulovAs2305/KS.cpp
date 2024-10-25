@@ -14,14 +14,20 @@ KS::KS()
 
 }
 
-std::string KS::Getname()
+std::string KS::Getname() const
 {
     return name;
 }
 
+
 int KS::GetId()
 {
     return id;
+}
+
+int KS::Getworkshops() const
+{
+    return workshops;
 }
 
 std::ifstream& operator>>(std::ifstream& fin, KS& g)

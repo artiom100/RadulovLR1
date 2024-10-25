@@ -5,8 +5,8 @@
 #include "Tools.h"
 #include <unordered_map>
 
-std::unordered_map<int, Pipe> Pipemap;
-std::unordered_map<int, KS> KSmap;
+//std::unordered_map<int, Pipe> Pipemap;
+//std::unordered_map<int, KS> KSmap;
 
 std::unordered_map<int, Pipe> PipesCreate(Pipe & p, std::unordered_map<int, Pipe> &m) {
     m.emplace(p.GetId(), p);
