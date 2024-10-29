@@ -43,7 +43,7 @@ std::ifstream& operator>>(std::ifstream& fin, KS& g)
 
 std::ofstream& operator<<(std::ofstream& fout, const KS& g)
 {
-    fout << g.name << std::endl << g.workshops << std::endl << g.workshops_work << std::endl << g.efficiency << std::endl;
+    fout << g.id << std::endl << g.name << std::endl << g.workshops << std::endl << g.workshops_work << std::endl << g.efficiency << std::endl;
     return fout;
 }
 

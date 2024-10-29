@@ -1,7 +1,4 @@
-﻿// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <fstream>
 #include "Pipe.h"
@@ -66,8 +63,9 @@ int main()
 //    }
 //}
 
-std::string name;
+
 void FindPipename() {
+    std::string name;
     if (Pipemap.empty()) {
         std::cout << "Труб нет" << std::endl << std::endl;
     }
@@ -79,9 +77,8 @@ void FindPipename() {
     }
    
 }
-bool checkst;
 void FindPipestate() {
-   
+    bool checkst;
     if (Pipemap.empty()) {
         std::cout << "Труб нет" << std::endl << std::endl;
     }
@@ -96,6 +93,7 @@ void FindPipestate() {
     }
 }
 void FindKSname() {
+    std::string name;
     if (KSmap.empty()) {
         std::cout << "";
     }
@@ -106,8 +104,8 @@ void FindKSname() {
             std::cout << KSmap[i];
     }
 }
-int work;
 void FindKSwork() {
+    int work;
     if (KSmap.empty()) {
         std::cout << "КС нет" << std::endl << std::endl;
     }
@@ -142,19 +140,39 @@ void Printaddmenu() {
 }
 
 
+void savepipe(std::ofstream& fout, const Pipe& p) {
+    for (auto& p : Pipemap) {
+        fout << p.second;
+    }
+    
+}
+void saveks(std::ofstream& fout, const KS& g) {
+    for (auto& g : KSmap) {
+        fout << g.second;
+    }
+}
+void loadPipes(std::ifstream& fin, std::unordered_map<int, Pipe>& Pipemap) {
+    while (int i = 0 != Pipemap.size()) {
+        Pipe p;
+        fin >> p;
+        Pipemap[p.GetId()] = p;
+    i++;
+    }
+    
+}
+
+
+
 void MainMenu() {
     Pipe p;
     KS g;
     int usernumber;
-    
-
     while (1) {
         PrintMainMenu();
         while (!(std::cin >> usernumber)) {
             std::cout << "Ошибка ввода. Введите корректное значение  ";
             fix();
         }
-
         switch (usernumber) {
         case 1:
             std::cin >> p;
@@ -168,14 +186,35 @@ void MainMenu() {
             PipesPrint(Pipemap);
             KSPrint(KSmap);
             break;
+        case 6: {
+            std::ofstream fout;
+            fout.open("data.txt", std::ios::out);
+            if (fout.is_open()) {
+                /*fout << Pipemap.size() << std::endl;*/
+                savepipe(fout, p);
+                /*fout << KSmap.size() << std::endl;*/
+                saveks(fout, g);
+            }
+            else {
+                std::cout << "Не удолось произвести запись в файл.";
+            }
+            break;
+        }
         case 7: {
+            std::ifstream fin("data.txt", std::ios::in);
+            if (fin.is_open()) {
+                loadPipes(fin, Pipemap);
+                fin.close();
+            }
+            else {
+                std::cout << "Не удалось считать данные." << std::endl;
+            }
             break;
         }
         case 8: {
-            // Подменю для поиска
             bool exitSubMenu = false;
             while (!exitSubMenu) {
-                Printaddmenu(); // Печать подменю
+                Printaddmenu();
                 std::cin >> usernumber;
                 switch (usernumber) {
                 case 1:
@@ -201,7 +240,7 @@ void MainMenu() {
             break;
         }
         case 0:
-            return; // Завершение программы
+            return;
         default:
             std::cout << "Некорректный ввод. Попробуйте снова.\n";
             break;

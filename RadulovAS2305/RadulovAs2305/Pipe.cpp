@@ -35,7 +35,7 @@ std::ifstream& operator>>(std::ifstream& fin, Pipe& p)
 
 std::ofstream& operator<<(std::ofstream& fout, const Pipe& p)
 {
-    fout << p.name << std::endl << p.length << std::endl << p.diameter << std::endl << p.state << std::endl;
+    fout << p.id << std::endl << p.name << std::endl << p.length << std::endl << p.diameter << std::endl << p.state << std::endl;
 	return fout;
 }
 
