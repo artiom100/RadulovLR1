@@ -32,12 +32,13 @@ int KS::Getworkshops() const
 
 std::ifstream& operator>>(std::ifstream& fin, KS& g)
 {
+    fin >> g.id;
     fin >> std::ws;
     getline(fin, g.name);
     fin >> g.workshops;
     fin >> g.workshops_work;
     fin >> g.efficiency;
-
+    g.maxid = g.id;
     return fin;
 }
 
@@ -51,24 +52,14 @@ std::istream& operator>>(std::istream& in, KS& g)
 {
     std::cout << "\n";
     std::cout << "¬ведите название дл€  —: ";
-    in >> std::ws;
-    getline(in, g.name);
+    INPUT_LINE(in, g.name);
     g.id = ++ g.maxid;
     std::cout << "¬ведите количество цехов: ";
-    while (!(in >> g.workshops) || g.workshops <= 0) {
-        std::cout << "ќшибка ввода. ¬ведите целое число цехов отличное от нул€: ";
-        fix();
-    }
+    g.workshops = GetCorrectNumber(1, 10000);
     std::cout << "¬ведите количество цехов в работе: ";
-    while (!(in >> g.workshops_work) || (g.workshops < g.workshops_work) || g.workshops_work < 0) {
-        std::cout << "ќшибка ввода. ¬ведите корректное число цехов в работе (количество цехов в работе должно быть меньше количества цехов): ";
-        fix();
-    }
+    g.workshops_work = GetCorrectNumber(0, g.workshops);
     std::cout << "¬ведите Ёффективность: ";
-    while (!(in >> g.efficiency) || g.efficiency <= 0 || g.efficiency > 100) {
-        std::cout << "ќшибка ввода. ¬ведите целое число эффективности в диапозоне от 1 до 100: ";
-        fix();
-    }
+    g.efficiency = GetCorrectNumber(1, 100);
     std::cout << std::endl;
     return in;
 }

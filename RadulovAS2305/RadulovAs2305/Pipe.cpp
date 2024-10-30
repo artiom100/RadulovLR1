@@ -23,13 +23,13 @@ bool Pipe::Getstate() const
 
 std::ifstream& operator>>(std::ifstream& fin, Pipe& p)
 {
+    fin >> p.id;
     fin >> std::ws;
     getline(fin, p.name);
-    fin >> p.id;
-    p.maxid = p.id;
     fin >> p.length;
     fin >> p.diameter;
     fin >> p.state;
+    p.maxid = p.id;
 	return fin;
 }
 
@@ -42,24 +42,14 @@ std::ofstream& operator<<(std::ofstream& fout, const Pipe& p)
 std::istream& operator>>(std::istream& in, Pipe& p)
 {
     std::cout << "Введите название для трубы: ";
-    in >> std::ws;
-    getline(in, p.name);
+    INPUT_LINE(in, p.name);
     p.id = ++p.maxid;
     std::cout << "Введите длину: ";
-    while (!(in >> p.length) || p.length <= 0) {
-        std::cout << "Ошибка ввода. Введите целое число для длины отличное от нуля: ";
-        fix();
-    }
+    p.length = GetCorrectNumber(1, 10000);
     std::cout << "Введите диаметр: ";
-    while (!(in >> p.diameter) || p.diameter <= 0) {
-        std::cout << "Ошибка ввода. Введите целое число для диаметра: ";
-        fix();
-    }
+    p.diameter = GetCorrectNumber(1, 10000);
     std::cout << "Введите состояние: ";
-    while (!(in >> p.state)) {
-        std::cout << "Ошибка ввода. Введите 1 для исправно или 0 для в работе ";
-        fix();
-    }
+    p.state = GetCorrectNumber(0, 1);
     std::cout << std::endl;
 	return in;
 }
@@ -71,8 +61,9 @@ std::ostream& operator<<(std::ostream& out, const Pipe& p)
             out << "Название: " << p.name << std::endl;
             out << "Длина: " << p.length << std::endl;
             out << "Диаметр: " << p.diameter << std::endl;
-            out << "Состояние: " << (p.state ? "Исправна" : "В ремонте") << std::endl << std::endl; // Выводим данные о трубе, если она существует
+            out << "Состояние: " << (p.state ? "Исправна" : "В ремонте") << std::endl << std::endl;
 	return out;
+
 }
 
 int Pipe::GetId()

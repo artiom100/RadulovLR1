@@ -4,7 +4,34 @@
 #include "KS.h"
 #include <unordered_map>
 #include <unordered_set>
+#include <chrono>
+#include <format>
+
+
+#define INPUT_LINE(in, str) getline(in>>std::ws, str); \
+						std::cerr << str << std::endl
 void fix();
+
+
+class redirect_output_wrapper
+{
+	std::ostream& stream;
+	std::streambuf* const old_buf;
+public:
+	redirect_output_wrapper(std::ostream& src)
+		:old_buf(src.rdbuf()), stream(src)
+	{
+	}
+	~redirect_output_wrapper() {
+		stream.rdbuf(old_buf);
+	}
+	void redirect(std::ostream& dest)
+	{
+		stream.rdbuf(dest.rdbuf());
+	}
+};
+
+
 
 
 bool checknamepipe(const Pipe& p, std::string param);
@@ -53,10 +80,18 @@ std::unordered_set<int> FindKSFilter(const std::unordered_map<int, KS>& KSmap, f
 	return res;
 }
 
-
-
-
-
-
-
-
+template <typename T>
+T GetCorrectNumber(T min, T max)
+{
+	T x;
+	while ((std::cin >> x).fail()
+		|| std::cin.peek() != '\n'	
+		|| x < min || x > max)		
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "¬ведите корректное зачение: ";
+	}
+	std::cerr << x << std::endl;
+	return x;
+}

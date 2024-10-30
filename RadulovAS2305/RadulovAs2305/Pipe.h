@@ -18,7 +18,7 @@ public:
     int GetId();
     std::string Getname() const;
     bool Getstate() const;
-
+    void SetState(bool newState) { state = newState; }
     friend std::ifstream& operator >> (std::ifstream& fin, Pipe& p);
     friend std::ofstream& operator << (std::ofstream& fout, const Pipe& p);
 
