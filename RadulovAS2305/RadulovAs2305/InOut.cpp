@@ -4,14 +4,18 @@
 #include <fstream>
 #include "Tools.h"
 #include <unordered_map>
-#define INPUT_LINE(input_stream, data);
 
-std::unordered_map<int, Pipe> PipesCreate(Pipe & p, std::unordered_map<int, Pipe> &m) {
+
+std::unordered_map<int, Pipe> PipesCreate(std::unordered_map<int, Pipe> &m) {
+    Pipe p;
+    std::cin >> p;
     m.emplace(p.GetId(), p);
     return m;
 }
 
-std::unordered_map<int, KS> KSCreate(KS &g, std::unordered_map<int, KS>& m) {
+std::unordered_map<int, KS> KSCreate(std::unordered_map<int, KS>& m) {
+    KS g;
+    std::cin >> g;
     m.emplace(g.GetId(), g);
     return m;
 }
@@ -44,8 +48,7 @@ void Load(std::unordered_map<int, Pipe>& Pipemap, std::unordered_map<int, KS>& K
     std::string data;
 
     std::cout << "ֲגוהטעו טלÿ פאיכא: ";
-    std::cin >> std::ws;
-    std::getline(std::cin, data);
+    INPUT_LINE(std::cin, data);
 
     fin.open(data);
 

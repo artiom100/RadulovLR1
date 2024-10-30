@@ -4,11 +4,12 @@
 #include <unordered_map>
 #include <sstream> 
 #include <vector>
+#include "Tools.h"
 
 
 
-std::unordered_map<int, KS> KSCreate(KS& g, std::unordered_map<int, KS>& m);
-std::unordered_map <int, Pipe> PipesCreate(Pipe& p, std::unordered_map<int, Pipe>& m);
+std::unordered_map<int, KS> KSCreate(std::unordered_map<int, KS>& m);
+std::unordered_map <int, Pipe> PipesCreate(std::unordered_map<int, Pipe>& m);
 void PipesPrint(std::unordered_map<int, Pipe>& m);
 void KSPrint(std::unordered_map<int, KS>& m);
 
@@ -39,7 +40,7 @@ void ModifyObjectById(std::unordered_map<int, T>& objects) {
         if constexpr (std::is_same_v<T, Pipe>) {
             bool newState;
             std::cout << "¬ведите новое состо€ние дл€ трубы (0 - неактивен, 1 - активен): ";
-            std::cin >> newState;
+            newState = GetCorrectNumber(0, 1);
             obj.SetState(newState);
             std::cout << "—осто€ние трубы обновлено.\n";
         }
@@ -47,7 +48,7 @@ void ModifyObjectById(std::unordered_map<int, T>& objects) {
             int change;
             std::cout << "“екущее количество рабочих цехов: " << obj.GetWorkshopsInUse() << "\n";
             std::cout << "¬ведите изменение в количестве рабочих цехов (положительное - прибавить, отрицательное - вычесть): ";
-            std::cin >> change;
+            change = GetCorrectNumber(-1000, 1000);
             obj.UpdateWorkshopsInUse(change);
             std::cout << " оличество рабочих цехов обновлено.\n";
         }
