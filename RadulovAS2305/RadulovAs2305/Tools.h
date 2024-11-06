@@ -8,6 +8,7 @@
 #include <format>
 
 
+
 #define INPUT_LINE(in, str) getline(in>>std::ws, str); \
 						std::cerr << str << std::endl
 void fix();
@@ -39,7 +40,8 @@ bool checkstate(const Pipe& p, bool param);
 
 bool checknameks(const KS& g, std::string param);
 bool workshops(const KS& g, int param);
-
+void edit(std::unordered_map<int, Pipe>& Pipemap, std::unordered_set <int> res);
+void delet(std::unordered_map<int, Pipe>& Pipemap, std::unordered_set <int> res);
 
 
 template<typename T>
@@ -49,17 +51,16 @@ template<typename T>
 std::unordered_set<int> FindPipeFilter(const std::unordered_map<int, Pipe>& Pipemap, filterpipe<T> f, T param)
 {
 	std::unordered_set <int> res;
-	int i = 0;
 	for (auto& p : Pipemap)
 	{
-		if (f(p.second, param))
+		if (f(p.second, param)) {
 			res.emplace(p.first);
-		i++;
+			std::cout << p.second;
+		}
 	}
 
 	return res;
 }
-
 
 
 template<typename T>
@@ -69,12 +70,12 @@ template<typename T>
 std::unordered_set<int> FindKSFilter(const std::unordered_map<int, KS>& KSmap, filterks<T> f, T param)
 {
 	std::unordered_set <int> res;
-	int i = 0;
 	for (auto& g : KSmap)
 	{
-		if (f(g.second, param))
+		if (f(g.second, param)) {
 			res.emplace(g.first);
-		i++;
+			std::cout << g.second;
+		}
 	}
 
 	return res;
@@ -95,3 +96,4 @@ T GetCorrectNumber(T min, T max)
 	std::cerr << x << std::endl;
 	return x;
 }
+

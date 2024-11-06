@@ -67,3 +67,56 @@ void Load(std::unordered_map<int, Pipe>& Pipemap, std::unordered_map<int, KS>& K
     }
     fin.close();
 }
+
+void ChangePipe(std::unordered_map<int, Pipe>& Pipemap, std::unordered_set <int>& res) {
+    std::string idInput;
+    std::cout << "Введите ID объектов для изменения (через пробел): ";
+    INPUT_LINE(std::cin, idInput);
+    // Парсинг строки с ID в вектор
+    std::istringstream idStream(idInput);
+    std::unordered_set<int> ids;
+    int id;
+    while (idStream >> id) {
+        ids.emplace(id);
+    }
+
+    // Удаление объектов по каждому ID из списка
+    for (int id : ids) {
+        if (res.find(id) == res.end()) {
+            std::cout << "Объект с ID " << id << " не найден.\n";
+            continue;
+        }
+        Pipemap.at(id).changeofstate();
+        std::cout << "Объект с ID " << id << " успешно изменены\n";
+    }
+}
+
+void ChangeKS(std::unordered_map<int, KS>& KSmap, std::unordered_set <int>& res) {
+    std::string idInput;
+    std::cout << "Введите ID объектов для изменения (через пробел): ";
+    INPUT_LINE(std::cin, idInput);
+    // Парсинг строки с ID в вектор
+    std::istringstream idStream(idInput);
+    std::unordered_set<int> ids;
+    int id;
+    while (idStream >> id) {
+        ids.emplace(id);
+    }
+    int change;
+    std::cout << "Введите количество цехов ";
+    change = GetCorrectNumber(0, 100);
+    // Удаление объектов по каждому ID из списка
+    for (int id : ids) {
+        if (res.find(id) == res.end()) {
+            std::cout << "Объект с ID " << id << " не найден.\n";
+            continue;
+        }
+        
+        if (KSmap.at(id).UpdateWorkshopsInUse(change)) {
+            std::cout << "Объект с ID " << id << " успешно изменены\n";
+        }
+        else {
+            std::cout << "Ошибка изменения объекта." << std::endl;
+        }
+    }
+}

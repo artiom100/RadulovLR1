@@ -20,6 +20,10 @@ bool Pipe::Getstate() const
     return state;
 }
 
+void Pipe::changeofstate()
+{
+    state = !state;
+}
 
 std::ifstream& operator>>(std::ifstream& fin, Pipe& p)
 {

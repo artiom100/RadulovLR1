@@ -25,71 +25,33 @@ std::unordered_map<int, T> LoadObject(std::unordered_map<int, T>& Object, int co
 void Load(std::unordered_map<int, Pipe>& Pipemap, std::unordered_map<int, KS>& KSmap);
 
 template <typename T>
-void ModifyObjectById(std::unordered_map<int, T>& objects) {
-    std::string idInput;
-    std::cout << "Введите ID объектов для изменения (через пробел): ";
-    std::getline(std::cin >> std::ws, idInput);
-
-    std::istringstream idStream(idInput);
-    std::vector<int> ids;
-    int id;
-    while (idStream >> id) {
-        ids.push_back(id);
-    }
-    auto modifyObject = [](T& obj) {
-        if constexpr (std::is_same_v<T, Pipe>) {
-            bool newState;
-            std::cout << "Введите новое состояние для трубы (0 - неактивен, 1 - активен): ";
-            newState = GetCorrectNumber(0, 1);
-            obj.SetState(newState);
-            std::cout << "Состояние трубы обновлено.\n";
-        }
-        else if constexpr (std::is_same_v<T, KS>) {
-            int change;
-            std::cout << "Текущее количество рабочих цехов: " << obj.GetWorkshopsInUse() << "\n";
-            std::cout << "Введите изменение в количестве рабочих цехов (положительное - прибавить, отрицательное - вычесть): ";
-            change = GetCorrectNumber(-1000, 1000);
-            obj.UpdateWorkshopsInUse(change);
-            std::cout << "Количество рабочих цехов обновлено.\n";
-        }
-        };
-
-    // Обработка каждого ID из списка
-    for (int id : ids) {
-        auto it = objects.find(id);
-        if (it != objects.end()) {
-            modifyObject(it->second);
-        }
-        else {
-            std::cout << "Объект с ID " << id << " не найден.\n";
-        }
-    }
-}
-
-
-template <typename T>
-void DeleteObjectById(std::unordered_map<int, T>& objects) {
+void DeleteObjectById(std::unordered_map<int, T>& objects, std::unordered_set <int>& res) {
     std::string idInput;
     std::cout << "Введите ID объектов для удаления (через пробел): ";
-    std::getline(std::cin >> std::ws, idInput);
-
+    INPUT_LINE(std::cin, idInput);
     // Парсинг строки с ID в вектор
     std::istringstream idStream(idInput);
-    std::vector<int> ids;
+    std::unordered_set<int> ids;
     int id;
     while (idStream >> id) {
-        ids.push_back(id);
+        ids.emplace(id);
     }
 
     // Удаление объектов по каждому ID из списка
     for (int id : ids) {
         auto it = objects.find(id);
+        if (res.find(id) == res.end()) {
+            std::cout << "Объект с ID " << id << " не найден.\n";
+            continue;
+        }
         if (it != objects.end()) {
             objects.erase(it);
             std::cout << "Объект с ID " << id << " успешно удален.\n";
         }
-        else {
-            std::cout << "Объект с ID " << id << " не найден.\n";
-        }
     }
 }
+
+
+
+void ChangePipe(std::unordered_map<int, Pipe>& Pipemap, std::unordered_set <int>& res);
+void ChangeKS(std::unordered_map<int, KS>& KSmap, std::unordered_set <int>& res);
